@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttercommerce/models/onboarding_data.dart';
 import '../../widgets/auth_widgets.dart';
 import '../../services/auth_service.dart';
 import '../onboarding/onboarding_screen.dart';
 import 'registration_screen.dart';
-
+import '/screens/homepage/home_screen.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -103,6 +102,8 @@ class _LoginScreenState extends State<LoginScreen>
     _passwordController.dispose();
     super.dispose();
   }
+
+
   void _navigateToRegistration() {
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
@@ -151,8 +152,7 @@ class _LoginScreenState extends State<LoginScreen>
       final result = await AuthService.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
-
-    );
+      );
 
       if (mounted) {
         setState(() {
@@ -161,6 +161,11 @@ class _LoginScreenState extends State<LoginScreen>
 
         if (result.success) {
           _showSuccessMessage(result.message);
+
+
+          // Add a short delay to allow success message to show (optional)
+          await Future.delayed(const Duration(milliseconds: 500));
+
           _navigateToHome();
         } else {
           _showErrorMessage(result.message);
@@ -175,6 +180,7 @@ class _LoginScreenState extends State<LoginScreen>
       }
     }
   }
+
 
   Future<void> _handleSocialLogin(String provider) async {
     HapticFeedback.lightImpact();
@@ -236,6 +242,22 @@ class _LoginScreenState extends State<LoginScreen>
       }
     }
   }
+  void _navigateToHomeScreen() {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 600),
+        pageBuilder: (context, animation, secondaryAnimation) => HomeScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+      ),
+    );
+  }
+
 
   void _navigateToHome() {
     Navigator.of(context).pushReplacement(
@@ -245,19 +267,7 @@ class _LoginScreenState extends State<LoginScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.check_circle,
-                  size: 100,
-                  color: Color(0xFFD2B48C),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Welcome to FlutterCommerce!',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+
                 const SizedBox(height: 10),
                 const Text(
                   'You have successfully signed in',
@@ -266,9 +276,10 @@ class _LoginScreenState extends State<LoginScreen>
                     color: Colors.grey,
                   ),
                 ),
-              ],
+              ]
             ),
           ),
+
         ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SlideTransition(
@@ -279,9 +290,11 @@ class _LoginScreenState extends State<LoginScreen>
             child: child,
           );
         },
-        transitionDuration: const Duration(milliseconds: 600),
+        transitionDuration: const Duration(milliseconds: 60000),
       ),
+
     );
+    _navigateToHomeScreen();
   }
 
   void _showSuccessMessage(String message) {
