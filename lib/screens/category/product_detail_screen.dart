@@ -1,43 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:fluttercommerce/screens/category/wishlist_screen.dart';
-
+import 'package:fluttercommerce/services/wishlist_service.dart';
+import '../../services/cart_service.dart';
 import '../homepage/home_screen.dart';
 import '../homepage/profile_screen.dart';
 import 'cart_screen.dart';
-import 'category_product_screen.dart';
 
-class CategoryScreen extends StatelessWidget {
-  final List<String> categories = [
-    "Men's clothing",
-    "Women's clothing",
-    'Electronics',
-    'Jewelery',
-    'Home & Kitchen',
-    'Sports & Outdoors',
-  ];
+
+class ProductDetailScreen extends StatelessWidget {
+  final dynamic product;
+
+  const ProductDetailScreen({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Categories'),
-        backgroundColor: Colors.brown.shade300,
-      ),
-      body: ListView.builder(
-        itemCount: categories.length,
-        itemBuilder: (context, index) => ListTile(
-          title: Text(categories[index]),
-          trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => CategoryProductsScreen(category: categories[index]),
-                ),
-              );
-            },
-
-        ),
+      appBar: AppBar(title: Text(product['title'])),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: Image.network(product['image'], fit: BoxFit.contain),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(product['description']),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                CartService.addToCart(product);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Added to cart')),
+                );
+              },
+              child: const Text('Add to Cart'),
+            ),
+          ),Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                WishlistManager.addToWishlist(product);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Added to wishlist')),
+                );
+              },
+              child: const Text('Add to wishlist'),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: _buildFloatingNavbar(context),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/auth_widgets.dart';
 import '../../services/auth_service.dart';
 import '../onboarding/onboarding_screen.dart';
@@ -131,12 +132,24 @@ class _LoginScreenState extends State<LoginScreen>
       _obscurePassword = !_obscurePassword;
     });
   }
-
-  void _toggleRememberMe() {
+  Future<void> saveLoginState(bool rememberMe, String userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (rememberMe) {
+      await prefs.setBool('isLoggedIn', true);
+      await prefs.setString('userId', userId); // or a token
+    } else {
+      await prefs.remove('isLoggedIn');
+      await prefs.remove('userId');
+    }
+  }
+  void _toggleRememberMe() async {
     setState(() {
       _rememberMe = !_rememberMe;
     });
     HapticFeedback.lightImpact();
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('rememberMe', _rememberMe);
   }
 
   Future<void> _handleLogin() async {

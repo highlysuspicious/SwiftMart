@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/onboarding/onboarding_screen.dart';
 
 void main() async {
@@ -64,4 +65,8 @@ class FlutterCommerceApp extends StatelessWidget {
       home: const OnboardingScreen(),
     );
   }
+}
+Future<bool> isUserLoggedIn() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getBool('isLoggedIn') ?? false;
 }

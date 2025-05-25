@@ -1,43 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:fluttercommerce/screens/category/wishlist_screen.dart';
-
 import '../homepage/home_screen.dart';
 import '../homepage/profile_screen.dart';
+import '/services/api_service.dart';
+import '/widgets/product_card.dart';
 import 'cart_screen.dart';
-import 'category_product_screen.dart';
 
-class CategoryScreen extends StatelessWidget {
-  final List<String> categories = [
-    "Men's clothing",
-    "Women's clothing",
-    'Electronics',
-    'Jewelery',
-    'Home & Kitchen',
-    'Sports & Outdoors',
-  ];
+class CategoryProductsScreen extends StatelessWidget {
+  final String category;
+
+  const CategoryProductsScreen({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Categories'),
+        title: Text(category),
         backgroundColor: Colors.brown.shade300,
       ),
-      body: ListView.builder(
-        itemCount: categories.length,
-        itemBuilder: (context, index) => ListTile(
-          title: Text(categories[index]),
-          trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => CategoryProductsScreen(category: categories[index]),
-                ),
-              );
-            },
+      body: FutureBuilder<List<dynamic>>(
+        future: CategoryService.fetchByCategory(category),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
 
-        ),
+          return GridView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: snapshot.data!.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 16,
+              childAspectRatio: 0.65,
+            ),
+            itemBuilder: (context, index) {
+              return ProductCard(product: snapshot.data![index]);
+            },
+          );
+        },
       ),
       bottomNavigationBar: _buildFloatingNavbar(context),
     );

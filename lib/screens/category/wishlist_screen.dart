@@ -1,43 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:fluttercommerce/screens/category/wishlist_screen.dart';
-
+import '../../services/wishlist_service.dart';
 import '../homepage/home_screen.dart';
 import '../homepage/profile_screen.dart';
 import 'cart_screen.dart';
-import 'category_product_screen.dart';
 
-class CategoryScreen extends StatelessWidget {
-  final List<String> categories = [
-    "Men's clothing",
-    "Women's clothing",
-    'Electronics',
-    'Jewelery',
-    'Home & Kitchen',
-    'Sports & Outdoors',
-  ];
+
+class WishlistScreen extends StatelessWidget {
+  const WishlistScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final cartItems = WishlistManager.wishlistItems;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Categories'),
-        backgroundColor: Colors.brown.shade300,
-      ),
+      appBar: AppBar(title: const Text('Your Wishlist')),
       body: ListView.builder(
-        itemCount: categories.length,
-        itemBuilder: (context, index) => ListTile(
-          title: Text(categories[index]),
-          trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => CategoryProductsScreen(category: categories[index]),
-                ),
-              );
-            },
-
-        ),
+        itemCount: cartItems.length,
+        itemBuilder: (context, index) {
+          final item = cartItems[index];
+          return ListTile(
+            leading: Image.network(item['image'], width: 50),
+            title: Text(item['title']),
+            subtitle: Text('\$${item['price']}'),
+          );
+        },
       ),
       bottomNavigationBar: _buildFloatingNavbar(context),
     );
