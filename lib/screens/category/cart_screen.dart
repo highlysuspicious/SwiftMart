@@ -60,7 +60,7 @@ class _CartScreenState extends State<CartScreen> {
     for (var entry in groupedItems.entries) {
       final product = entry.value['product'];
       final quantity = entry.value['quantity'];
-      total += (product['price'] as double) * quantity;
+      total += (product['price'] as num).toDouble() * quantity;
     }
     return total;
   }

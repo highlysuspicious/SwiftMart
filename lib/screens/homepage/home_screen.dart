@@ -182,59 +182,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Category and History buttons
-            Padding(
-              padding: const EdgeInsets.only(right: 16, top: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        // Navigate to Categories
-                      },
-                      icon: Icon(Icons.category, size: 16),
-                      label: Text('Categories', overflow: TextOverflow.ellipsis),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.brown.shade200,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        // Navigate to History
-                      },
-                      icon: Icon(Icons.history, size: 16),
-                      label: Text('History', overflow: TextOverflow.ellipsis),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.brown.shade200,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        // Navigate to Contact Us
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => ContactUsScreen()),
-                        );
-                      },
-                      icon: Icon(Icons.contact_mail, size: 16),
-                      label: Text('Contact Us', overflow: TextOverflow.ellipsis),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.brown.shade200,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-            ),
-
             // Show banner only when not searching
             if (!_isSearching) ...[
               // 🔥 Hero Banner
@@ -247,7 +194,96 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }).toList(),
               ).animate().fade(duration: 600.ms).scale(),
-
+              // Category and History buttons
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 8,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                  border: Border.all(color: Colors.white.withOpacity(0.2)),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => CategoryScreen()),
+                          );
+                        },
+                        icon: Icon(Icons.category, size: 18),
+                        label: Text('List'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.brown.shade400,
+                          foregroundColor: Colors.white,
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 14),
+                          textStyle: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => OrderHistoryScreen()),
+                          );
+                        },
+                        icon: Icon(Icons.history, size: 18),
+                        label: Text('Log'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.brown.shade400,
+                          foregroundColor: Colors.white,
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 14),
+                          textStyle: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => ContactUsScreen()),
+                          );
+                        },
+                        icon: Icon(Icons.support_agent, size: 18),
+                        label: Text('Help'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.brown.shade400,
+                          foregroundColor: Colors.white,
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 14),
+                          textStyle: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+              ,
               const SizedBox(height: 24),
 
               // ✨ Section Title
