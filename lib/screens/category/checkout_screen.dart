@@ -43,7 +43,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
     super.initState();
 
     Stripe.publishableKey =
-        'pk_test_51QRdLvCEziLhJKuP9wSonqPAnfcO55b8V5GspOqpL0iyffBTTfsw4N4oMeVCSw10dEiUYUZ8yGdof7I5ke47Lloi00YU8nuwMM';
+        'YOUR_STRIPE_PUBLISHABLE_KEY_HERE'; // Replace with your actual Stripe publishable key
 
     _fadeController = AnimationController(
       duration: const Duration(milliseconds: 800),
