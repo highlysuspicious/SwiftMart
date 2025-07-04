@@ -6,6 +6,7 @@ import '../../services/auth_service.dart';
 import '../onboarding/onboarding_screen.dart';
 import 'registration_screen.dart';
 import '/screens/homepage/home_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -55,37 +56,27 @@ class _LoginScreenState extends State<LoginScreen>
       vsync: this,
     );
 
-    _backgroundAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _backgroundController,
-      curve: Curves.easeInOut,
-    ));
+    _backgroundAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _backgroundController, curve: Curves.easeInOut),
+    );
 
-    _formSlideAnimation = Tween<double>(
-      begin: 100.0,
-      end: 0.0,
-    ).animate(CurvedAnimation(
-      parent: _formController,
-      curve: const Interval(0.0, 0.8, curve: Curves.easeOutCubic),
-    ));
+    _formSlideAnimation = Tween<double>(begin: 100.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _formController,
+        curve: const Interval(0.0, 0.8, curve: Curves.easeOutCubic),
+      ),
+    );
 
-    _formFadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _formController,
-      curve: const Interval(0.2, 1.0, curve: Curves.easeOut),
-    ));
+    _formFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _formController,
+        curve: const Interval(0.2, 1.0, curve: Curves.easeOut),
+      ),
+    );
 
-    _buttonScaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.95,
-    ).animate(CurvedAnimation(
-      parent: _buttonController,
-      curve: Curves.easeInOut,
-    ));
+    _buttonScaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut),
+    );
   }
 
   void _startAnimations() {
@@ -104,11 +95,12 @@ class _LoginScreenState extends State<LoginScreen>
     super.dispose();
   }
 
-
   void _navigateToRegistration() {
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => const RegistrationScreen(),
+        pageBuilder:
+            (context, animation, secondaryAnimation) =>
+                const RegistrationScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -116,10 +108,13 @@ class _LoginScreenState extends State<LoginScreen>
       ),
     );
   }
+
   void _navigateToOnboarding() {
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => const OnboardingScreen(),
+        pageBuilder:
+            (context, animation, secondaryAnimation) =>
+                const OnboardingScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -127,11 +122,13 @@ class _LoginScreenState extends State<LoginScreen>
       ),
     );
   }
+
   void _togglePasswordVisibility() {
     setState(() {
       _obscurePassword = !_obscurePassword;
     });
   }
+
   Future<void> saveLoginState(bool rememberMe, String userId) async {
     final prefs = await SharedPreferences.getInstance();
     if (rememberMe) {
@@ -142,6 +139,7 @@ class _LoginScreenState extends State<LoginScreen>
       await prefs.remove('userId');
     }
   }
+
   void _toggleRememberMe() async {
     setState(() {
       _rememberMe = !_rememberMe;
@@ -175,7 +173,6 @@ class _LoginScreenState extends State<LoginScreen>
         if (result.success) {
           _showSuccessMessage(result.message);
 
-
           // Add a short delay to allow success message to show (optional)
           await Future.delayed(const Duration(milliseconds: 500));
 
@@ -194,7 +191,6 @@ class _LoginScreenState extends State<LoginScreen>
     }
   }
 
-
   Future<void> _handleSocialLogin(String provider) async {
     HapticFeedback.lightImpact();
 
@@ -207,6 +203,9 @@ class _LoginScreenState extends State<LoginScreen>
 
       if (provider == 'Google') {
         result = await AuthService.signInWithGoogle();
+      }
+      if (provider == 'Apple') {
+        result = await AuthService.signInWithApple();
       }
 
       if (mounted) {
@@ -255,6 +254,7 @@ class _LoginScreenState extends State<LoginScreen>
       }
     }
   }
+
   void _navigateToHomeScreen() {
     Navigator.pushReplacement(
       context,
@@ -262,38 +262,30 @@ class _LoginScreenState extends State<LoginScreen>
         transitionDuration: const Duration(milliseconds: 600),
         pageBuilder: (context, animation, secondaryAnimation) => HomeScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(
-            opacity: animation,
-            child: child,
-          );
+          return FadeTransition(opacity: animation, child: child);
         },
       ),
     );
   }
 
-
   void _navigateToHome() {
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => Scaffold(
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-
-                const SizedBox(height: 10),
-                const Text(
-                  'You have successfully signed in',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
+        pageBuilder:
+            (context, animation, secondaryAnimation) => Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 10),
+                    const Text(
+                      'You have successfully signed in',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  ],
                 ),
-              ]
+              ),
             ),
-          ),
-
-        ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SlideTransition(
             position: Tween<Offset>(
@@ -305,7 +297,6 @@ class _LoginScreenState extends State<LoginScreen>
         },
         transitionDuration: const Duration(milliseconds: 60000),
       ),
-
     );
     _navigateToHomeScreen();
   }
@@ -459,7 +450,9 @@ class _LoginScreenState extends State<LoginScreen>
         Row(
           children: [
             GestureDetector(
-              onTap: () {_navigateToOnboarding();},
+              onTap: () {
+                _navigateToOnboarding();
+              },
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -495,10 +488,9 @@ class _LoginScreenState extends State<LoginScreen>
         const SizedBox(height: 8),
         Text(
           'Sign in to continue your premium shopping experience',
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            fontSize: 16,
-            color: Colors.black54,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyLarge?.copyWith(fontSize: 16, color: Colors.black54),
         ),
       ],
     );
@@ -519,8 +511,9 @@ class _LoginScreenState extends State<LoginScreen>
               if (value == null || value.isEmpty) {
                 return 'Please enter your email';
               }
-              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                  .hasMatch(_emailController.text.trim())) {
+              if (!RegExp(
+                r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+              ).hasMatch(_emailController.text.trim())) {
                 return 'Please enter a valid email';
               }
               return null;
@@ -567,28 +560,32 @@ class _LoginScreenState extends State<LoginScreen>
                       width: 20,
                       height: 20,
                       decoration: BoxDecoration(
-                        color: _rememberMe ? const Color(0xFFD2B48C) : Colors.transparent,
+                        color:
+                            _rememberMe
+                                ? const Color(0xFFD2B48C)
+                                : Colors.transparent,
                         border: Border.all(
-                          color: _rememberMe ? const Color(0xFFD2B48C) : Colors.grey,
+                          color:
+                              _rememberMe
+                                  ? const Color(0xFFD2B48C)
+                                  : Colors.grey,
                           width: 2,
                         ),
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: _rememberMe
-                          ? const Icon(
-                        Icons.check,
-                        size: 14,
-                        color: Colors.white,
-                      )
-                          : null,
+                      child:
+                          _rememberMe
+                              ? const Icon(
+                                Icons.check,
+                                size: 14,
+                                color: Colors.white,
+                              )
+                              : null,
                     ),
                     const SizedBox(width: 8),
                     const Text(
                       'Remember me',
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 14,
-                      ),
+                      style: TextStyle(color: Colors.black54, fontSize: 14),
                     ),
                   ],
                 ),
@@ -626,10 +623,7 @@ class _LoginScreenState extends State<LoginScreen>
                     padding: const EdgeInsets.symmetric(vertical: 18),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        colors: [
-                          Color(0xFFD2B48C),
-                          Color(0xFFB8860B),
-                        ],
+                        colors: [Color(0xFFD2B48C), Color(0xFFB8860B)],
                       ),
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
@@ -640,26 +634,27 @@ class _LoginScreenState extends State<LoginScreen>
                         ),
                       ],
                     ),
-                    child: _isLoading
-                        ? const Center(
-                      child: SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      ),
-                    )
-                        : const Text(
-                      'Sign In',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    child:
+                        _isLoading
+                            ? const Center(
+                              child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            )
+                            : const Text(
+                              'Sign In',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                   ),
                 ),
               );
@@ -680,10 +675,7 @@ class _LoginScreenState extends State<LoginScreen>
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 'Or continue with',
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: Colors.black54, fontSize: 14),
               ),
             ),
             Expanded(child: Divider(color: Colors.grey.shade300)),
@@ -720,10 +712,7 @@ class _LoginScreenState extends State<LoginScreen>
           children: [
             const Text(
               "Don't have an account? ",
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.black54, fontSize: 14),
             ),
             GestureDetector(
               onTap: () {
@@ -763,7 +752,8 @@ class _LoginScreenState extends State<LoginScreen>
       builder: (context, child) {
         return Positioned(
           left: MediaQuery.of(context).size.width * positions[index].dx,
-          top: MediaQuery.of(context).size.height * positions[index].dy +
+          top:
+              MediaQuery.of(context).size.height * positions[index].dy +
               (index % 2 == 0 ? 20 : -20) * _backgroundAnimation.value,
           child: Container(
             width: sizes[index],

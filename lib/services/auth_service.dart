@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluttercommerce/models/user_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:fluttercommerce/models/user_model.dart'; // your model
 
 class AuthService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -18,13 +20,11 @@ class AuthService {
         email: email,
         password: password,
       );
-
-
-        return AuthResult(
-          success: true,
-          message: 'Registration successful! Check your email for verification.',
-        );
-
+      return AuthResult(
+        success: true,
+        message: 'Registration successful! Check your email for verification.',
+        user: result.user,
+      );
     } on FirebaseAuthException catch (e) {
       return AuthResult(success: false, message: _getErrorMessage(e.code));
     } catch (_) {
@@ -37,12 +37,14 @@ class AuthService {
     required String password,
   }) async {
     try {
-      // Example Firebase logic
-      final credential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      final credential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       return AuthResult(
         success: true,
         message: 'Signed in successfully.',
+        user: credential.user,
       );
     } on FirebaseAuthException catch (e) {
       return AuthResult(success: false, message: _getErrorMessage(e.code));
@@ -75,6 +77,37 @@ class AuthService {
     }
   }
 
+  static Future<AuthResult> signInWithApple() async {
+    try {
+      if (!Platform.isIOS && !Platform.isMacOS) {
+        return AuthResult(
+          success: false,
+          message: 'Apple Sign-In is only supported on Apple devices.',
+        );
+      }
+
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      final oauthCredential = OAuthProvider("apple.com").credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
+
+      final result = await _auth.signInWithCredential(oauthCredential);
+      return AuthResult(
+        success: true,
+        user: result.user,
+        message: 'Signed in with Apple.',
+      );
+    } catch (e) {
+      return AuthResult(success: false, message: 'Apple sign-in failed: $e');
+    }
+  }
 
   static Future<AuthResult> sendPasswordResetEmail(String email) async {
     try {
