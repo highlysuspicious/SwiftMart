@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Flutter',
+                              text: 'Swift',
                               style: GoogleFonts.playfairDisplay(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             TextSpan(
-                              text: 'commerce',
+                              text: 'Mart',
                               style: GoogleFonts.montserrat(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w500,
