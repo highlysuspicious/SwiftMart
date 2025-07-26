@@ -225,7 +225,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         children: [
           const SizedBox(width: 60),
           Text(
-            'FlutterCommerce',
+            'SwiftMart',
             style: Theme.of(context).textTheme.displayMedium?.copyWith(
               fontWeight: FontWeight.w700,
               color: _onboardingData[_currentPage].color,
