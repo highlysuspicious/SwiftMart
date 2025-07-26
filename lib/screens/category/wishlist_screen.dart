@@ -19,7 +19,7 @@ class _WishlistScreenState extends State<WishlistScreen>
   late AnimationController _slideController;
   late AnimationController _staggerController;
   late AnimationController _headerController;
-
+//n
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _headerAnimation;
